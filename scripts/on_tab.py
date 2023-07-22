@@ -26,6 +26,7 @@ def on_ui_tabs():
 
         with gr.Row():
             output = gr.Text(label='Output',value='Status:',interactive=False)
+        with gr.Row():
             current = gr.List(label='Current List',col_count=3, headers=['File', 'Changed', 'Path'])
 
         submit.click(
