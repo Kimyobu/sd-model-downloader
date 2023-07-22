@@ -1,12 +1,11 @@
 import modules.scripts as scripts
 import gradio as gr
-import os
 
 from modules import shared
 from modules import script_callbacks
 
 def on_ui_settings():
-    section = ('template', "Template")
+    section = ('downloader', "Model Downloader")
     shared.opts.add_option(
         "option1",
         shared.OptionInfo(

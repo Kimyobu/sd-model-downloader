@@ -1,6 +1,5 @@
 import modules.scripts as scripts
 import gradio as gr
-import os
 
 from modules import script_callbacks
 
