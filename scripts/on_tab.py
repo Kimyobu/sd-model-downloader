@@ -52,9 +52,9 @@ def sub1(model_type, model_url):
     try:
         scripts.os.system(
             f'aria2c --console-log-level=error -c -x 16 -s 16 -k 1M {model_url} -d {model_path}')
-        return [f'Status: Download {model_url} success [{model_path}]']
+        return f'Status: Download {model_url} success [{model_path}]'
     except Exception as Error:
-        return [f'Error: {Error}']
+        return f'Error: {Error}'
 
 
 def sub2(folder, url):
@@ -65,9 +65,9 @@ def sub2(folder, url):
     try:
         scripts.os.system(
             f'aria2c --console-log-level=error -c -x 16 -s 16 -k 1M {url} -d {folder}')
-        return [f'Status: Download {url} success [{folder}]']
+        return f'Status: Download {url} success [{folder}]'
     except Exception as Error:
-        return [f'Error: {Error}']
+        return f'Error: {Error}'
 
 
 script_callbacks.on_ui_tabs(on_ui_tabs)
