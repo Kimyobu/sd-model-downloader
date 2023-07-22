@@ -26,7 +26,7 @@ def on_ui_tabs():
                 full_width=False)
 
         with gr.Row():
-            output = gr.Text('Status:')
+            output = gr.Text(label='Output',value='Status:')
 
         submit.click(
             sub1,
@@ -52,7 +52,7 @@ def sub1(model_type, model_url):
         model_path = f'{scripts.os.getcwd()}/extensions/sd-we' + 'bui-controlnet/models'
     try:
         o = scripts.os.system(f'aria2c -c -x 16 -s 16 -k 1M {model_url} -d {model_path}')
-        if o == 0:
+        if o != 0:
             return 'Failed: Check output in console'
         else :
             return f'Status: Download {model_url} success [{model_path}]'
@@ -67,7 +67,7 @@ def sub2(folder, url):
         scripts.os.makedirs(folder, exist_ok=True)
     try:
         o = scripts.os.system(f'aria2c -c -x 16 -s 16 -k 1M {url} -d {folder}')
-        if o == 0:
+        if o != 0:
             return 'Failed: Check output in console'
         else :
             return f'Status: Download {url} success [{folder}]'
