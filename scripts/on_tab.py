@@ -1,8 +1,7 @@
-import modules.scripts as scripts
 import gradio as gr
-
 from modules import script_callbacks
-
+from modules.scripts import os
+import time
 
 def on_ui_tabs():
     with gr.Blocks(analytics_enabled=False) as ui_component:
@@ -27,52 +26,63 @@ def on_ui_tabs():
 
         with gr.Row():
             output = gr.Text(label='Output',value='Status:',interactive=False)
+            current = gr.List(label='Current List',col_count=3, headers=['File', 'Changed', 'Path'])
 
         submit.click(
             sub1,
             inputs=[model_type, model_url],
-            outputs=[output]
+            outputs=[output,current]
         )
 
         submit2.click(
             sub2,
             inputs=[folder, url],
-            outputs=[output]
+            outputs=[output,current]
         )
 
         return [(ui_component, "Model Downloader", "sd_model_downloader_tab")]
 
 
 def sub1(model_type, model_url):
-    model_url = f"\"{model_url}\""
-    model_path = f'{scripts.os.getcwd()}/models/{model_type}'
-    if not scripts.os.path.exists(model_path):
-        scripts.os.makedirs(model_path, exist_ok=True)
+    uri = f"\"{model_url}\""
+    model_path = f'{os.getcwd()}/models/{model_type}'
+    if not os.path.exists(model_path):
+        os.makedirs(model_path, exist_ok=True)
     if model_type == 'ControlNet':
-        model_path = f'{scripts.os.getcwd()}/extensions/sd-we' + 'bui-controlnet/models'
+        model_path = f'{os.getcwd()}/extensions/sd-we' + 'bui-controlnet/models'
     try:
-        o = scripts.os.system(f'aria2c -c -x 16 -s 16 -k 1M {model_url} -d {model_path}')
+        print(f'Downloading {model_url} to {model_path}')
+        o = os.system(f'aria2c --console-log-level=error -c -x 16 -s 16 -k 1M {uri} -d {model_path}')
         if o != 0:
-            return 'Failed: Check output in console'
+            return 'Failed: Check output in console', []
         else :
-            return f'Status: Download {model_url} success [{model_path}]'
+            output = []
+            for x in os.listdir(model_path):
+                p = f'{model_path}/{x}'
+                output.append([x,time.ctime(os.path.getmtime(p)),p])
+            return f'Status: Download {model_url} success [{model_path}]', output
     except Exception as Error:
-        return f'Error: {Error}'
+        return f'Error: {Error}', []
 
 
 def sub2(folder, url):
-    url = f"\"{url}\""
-    folder = f'{scripts.os.getcwd()}/{folder}'
-    if not scripts.os.path.exists(folder):
-        scripts.os.makedirs(folder, exist_ok=True)
+    uri = f"\"{url}\""
+    folder = f'{os.getcwd()}/{folder}'
+    if not os.path.exists(folder):
+        os.makedirs(folder, exist_ok=True)
     try:
-        o = scripts.os.system(f'aria2c -c -x 16 -s 16 -k 1M {url} -d {folder}')
+        print(f'Downloading {url} to {folder}')
+        o = os.system(f'aria2c --console-log-level=error -c -x 16 -s 16 -k 1M {uri} -d {folder}')
         if o != 0:
-            return 'Failed: Check output in console'
+            return 'Failed: Check output in console', []
         else :
-            return f'Status: Download {url} success [{folder}]'
+            output = []
+            for x in os.listdir(folder):
+                p = f'{folder}/{x}'
+                output.append([x,time.ctime(os.path.getmtime(p)),p])
+            return f'Status: Download {url} success [{folder}]', output
     except Exception as Error:
-        return f'Error: {Error}'
+        return f'Error: {Error}', []
 
 
 script_callbacks.on_ui_tabs(on_ui_tabs)
