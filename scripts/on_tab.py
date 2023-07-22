@@ -51,7 +51,7 @@ def sub1(model_type, model_url):
             'bui-controlnet/models'
     try:
         scripts.os.system(
-            f'aria2c --console-log-level=error -c -x 16 -s 16 -k 1M {model_url} -d {model_path}')
+            f'aria2c -c -x 16 -s 16 -k 1M {model_url} -d {model_path}')
         return f'Status: Download {model_url} success [{model_path}]'
     except Exception as Error:
         return f'Error: {Error}'
@@ -64,7 +64,7 @@ def sub2(folder, url):
         scripts.os.makedirs(folder, exist_ok=True)
     try:
         scripts.os.system(
-            f'aria2c --console-log-level=error -c -x 16 -s 16 -k 1M {url} -d {folder}')
+            f'aria2c -c -x 16 -s 16 -k 1M {url} -d {folder}')
         return f'Status: Download {url} success [{folder}]'
     except Exception as Error:
         return f'Error: {Error}'
