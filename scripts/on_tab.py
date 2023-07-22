@@ -14,14 +14,16 @@ def on_ui_tabs():
             )
             model_url = gr.Textbox(
                 label='Model Url', placeholder="Place model download url here (Not a url of page of model card)")
-            submit = gr.Button('Download').style(full_width=False)
+            submit = gr.Button(value='Download', variant='primary').style(
+                full_width=False)
 
         with gr.Row():
             folder = gr.Textbox(
                 label='Directory Path', value='embeddings', placeholder='Type your directory here')
             url = gr.Textbox(
                 label='Download URL', placeholder="Place model download url here (Not a url of page of model card)")
-            submit2 = gr.Button('Download').style(full_width=False)
+            submit2 = gr.Button(value='Download', variant='primary').style(
+                full_width=False)
 
         with gr.Row():
             output = gr.Text('Status:')
@@ -47,12 +49,13 @@ def sub1(model_type, model_url):
     if not scripts.os.path.exists(model_path):
         scripts.os.makedirs(model_path, exist_ok=True)
     if model_type == 'ControlNet':
-        model_path = f'{scripts.os.getcwd()}/extensions/sd-we' + \
-            'bui-controlnet/models'
+        model_path = f'{scripts.os.getcwd()}/extensions/sd-we' + 'bui-controlnet/models'
     try:
-        scripts.os.system(
-            f'aria2c -c -x 16 -s 16 -k 1M {model_url} -d {model_path}')
-        return f'Status: Download {model_url} success [{model_path}]'
+        o = scripts.os.system(f'aria2c -c -x 16 -s 16 -k 1M {model_url} -d {model_path}')
+        if o == 0:
+            return 'Failed: Check output in console'
+        else :
+            return f'Status: Download {model_url} success [{model_path}]'
     except Exception as Error:
         return f'Error: {Error}'
 
@@ -63,9 +66,11 @@ def sub2(folder, url):
     if not scripts.os.path.exists(folder):
         scripts.os.makedirs(folder, exist_ok=True)
     try:
-        scripts.os.system(
-            f'aria2c -c -x 16 -s 16 -k 1M {url} -d {folder}')
-        return f'Status: Download {url} success [{folder}]'
+        o = scripts.os.system(f'aria2c -c -x 16 -s 16 -k 1M {url} -d {folder}')
+        if o == 0:
+            return 'Failed: Check output in console'
+        else :
+            return f'Status: Download {url} success [{folder}]'
     except Exception as Error:
         return f'Error: {Error}'
 
