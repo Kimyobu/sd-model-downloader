@@ -26,7 +26,7 @@ def on_ui_tabs():
                 full_width=False)
 
         with gr.Row():
-            output = gr.Text(label='Output',value='Status:')
+            output = gr.Text(label='Output',value='Status:',interactive=False)
 
         submit.click(
             sub1,
